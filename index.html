@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Question for You</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #fce4ec; /* Soft pink background */
+            font-family: 'Arial', sans-serif;
+            overflow: hidden; /* Hide scrollbars */
+        }
+
+        .container {
+            text-align: center;
+            width: 90vw;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        h1 {
+            color: #c2185b; /* Darker pink for text */
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #c2185b;
+            font-size: 1.2rem;
+            z-index: 10;
+            max-width: 600px; /* Added for better readability on wide screens */
+            line-height: 1.6; /* Added for better spacing */
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        button {
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 10px;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        #yes-button, #why-love-button {
+            background-color: #ff4081; /* Bright pink */
+            color: white;
+        }
+
+        #yes-button:hover, #why-love-button:hover {
+            transform: scale(1.1); /* Make it bigger on hover */
+        }
+        
+        #no-button {
+            background-color: #f06292; /* Lighter pink */
+            color: white;
+            position: absolute;
+        }
+        
+        /* Containers for different screens */
+        .screen {
+            display: none; /* Hide all screens by default */
+        }
+
+        .screen.active {
+            display: flex; /* Show the active screen */
+        }
+
+        .reveal1-content img {
+            width: 70%; /* Use percentage for flexibility */
+            max-width: 250px; /* Set a max size for larger screens */
+            height: auto; /* Maintain aspect ratio */
+            border-radius: 15px;
+        }
+        
+        .reveal1-content #top-surprise-image {
+            width: 60%; /* Use percentage for flexibility */
+            max-width: 200px; /* Set a max size for larger screens */
+            height: auto; /* Maintain aspect ratio */
+            margin-bottom: 20px;
+        }
+
+        .reveal1-content h1 {
+            font-size: 3rem;
+            color: #ad1457;
+            margin-bottom: 20px;
+        }
+
+        /* Flower animation (for the first surprise) */
+        .flower {
+            position: fixed;
+            font-size: 2rem;
+            top: -1vh;
+            animation: fall 7s linear infinite;
+            user-select: none;
+        }
+
+        @keyframes fall {
+            from { top: -10%; }
+            to { top: 110%; }
+        }
+
+        /* --- RESPONSIVE STYLES for smaller screens --- */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .reveal1-content h1 {
+                font-size: 2.2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            button {
+                padding: 12px 24px;
+                font-size: 1rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container screen active" id="question-container">
+        <h1>Do you love me? 🥰</h1>
+        <div class="buttons">
+            <button id="yes-button">Yes!</button>
+            <button id="no-button">No</button>
+        </div>
+    </div>
+
+    <div class="container screen" id="reveal1-container">
+        <div class="reveal1-content">
+            <img id="top-surprise-image" src="image.png" alt="Cute couple">
+            <h1>YAY! I love you too! ❤️</h1>
+            <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" alt="Cute bears kissing">
+        </div>
+        <button id="why-love-button">Do you want to know what I want to say?</button>
+    </div>
+
+    <div class="container screen" id="reveal2-container">
+        <p>I wanted to say that I am extremely sorry and I am not saying just because i want you to be normal and talk to me normally..</p>
+        <p>... just be as much angry as you could be with me i deserve that i just want you say sorry everyday till i gain your trust again...</p>
+        <p>...and i am not acting good i actually want to change for you i want you in my life you are my constant and even after trying many years ...</p>
+        <p>... you feel like i am acting then i can act for my entire life for you to be there with me. I am sorry for what i did though i know a sorry won't heal the mark i gave...</p>
+        <p>... but i'll keep trying to get you back way better than it was earlier where i respect you treat you like the best person in my life...</p>
+        <p>...I am sorry.</p>
+    </div>
+
+    <script>
+        const questionContainer = document.getElementById('question-container');
+        const reveal1Container = document.getElementById('reveal1-container');
+        const reveal2Container = document.getElementById('reveal2-container');
+        
+        const yesButton = document.getElementById('yes-button');
+        const noButton = document.getElementById('no-button');
+        const whyLoveButton = document.getElementById('why-love-button');
+
+        let flowerIntervalId = null; // To store the interval ID for flowers
+
+        // Event for the FIRST "Yes" button
+        yesButton.addEventListener('click', () => {
+            questionContainer.classList.remove('active');
+            reveal1Container.classList.add('active');
+            // Start the flower animation here
+            createFlowers();
+        });
+
+        // Event for the button on the second screen
+        whyLoveButton.addEventListener('click', () => {
+            reveal1Container.classList.remove('active');
+            reveal2Container.classList.add('active');
+            // Stop flower animation
+            if (flowerIntervalId) clearInterval(flowerIntervalId);
+        });
+
+        noButton.addEventListener('mouseover', () => {
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            const buttonWidth = noButton.offsetWidth;
+            const buttonHeight = noButton.offsetHeight;
+
+            const randomX = Math.floor(Math.random() * (windowWidth - buttonWidth));
+            const randomY = Math.floor(Math.random() * (windowHeight - buttonHeight));
+
+            noButton.style.left = `${randomX}px`;
+            noButton.style.top = `${randomY}px`;
+        });
+        
+        function createFlowers() {
+            const flowers = ['🌹', '🌸', '🌷', '🌻', '💐', '🌺'];
+            flowerIntervalId = setInterval(() => {
+                const flower = document.createElement('div');
+                flower.classList.add('flower');
+                flower.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];
+                flower.style.left = Math.random() * 100 + 'vw';
+                flower.style.animationDuration = Math.random() * 2 + 5 + 's';
+                document.body.appendChild(flower);
+
+                setTimeout(() => {
+                    flower.remove();
+                }, 7000);
+            }, 300);
+        }
+    </script>
+
+</body>
+</html>
